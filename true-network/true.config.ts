@@ -7,7 +7,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 // import {gamePlaySchema} from '../schemas'
-import { adAttestationSchema, chainActivitySchema, multiChainReputationSchema } from './schemas'
+import { adAttestationSchema, chainActivitySchema } from './schemas'
 export const getTrueNetworkInstance = async (): Promise<TrueApi> => {
   const trueApi = await TrueApi.create(config.account.secret)
 
@@ -29,7 +29,7 @@ export const config: TrueConfig = {
   algorithm: {
     id: 124,
     path: 'acm',
-    schemas: [adAttestationSchema, chainActivitySchema, multiChainReputationSchema]
+    schemas: [adAttestationSchema, chainActivitySchema]
   },
 }
   

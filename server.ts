@@ -2,9 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import {fetchTransactionsByChain, fetchChainId} from './transaction/transaction'
 import { TrueApi } from '@truenetworkio/sdk'
-import { adAttestationSchema, chainActivitySchema, multiChainReputationSchema } from './true-network/schemas'
+import { adAttestationSchema, chainActivitySchema } from './true-network/schemas'
 import { config, getTrueNetworkInstance } from './true-network/true.config'
 import {runAlgo} from '@truenetworkio/sdk/dist/pallets/algorithms/extrinsic'
+
+
 
 // Define interfaces
 interface AttestationData {
@@ -12,6 +14,7 @@ interface AttestationData {
     rating: Date;
     userAddress: string;
     signature: string;
+
 }
 
 interface ApiResponse {

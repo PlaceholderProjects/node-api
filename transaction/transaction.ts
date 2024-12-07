@@ -1,6 +1,7 @@
 import { ethers, Log } from 'ethers';
 import axios from 'axios';
-
+import dotenv from 'dotenv'
+dotenv.config()
 interface chainInfo{
     chainId : number
 }
@@ -30,7 +31,7 @@ interface ChainConfig {
 const chainConfigs: Record<number, ChainConfig> = {
     1: {
         name: 'Ethereum',
-        rpcUrl: 'https://young-dimensional-haze.quiknode.pro/',
+        rpcUrl: `https://young-dimensional-haze.quiknode.pro/${process.env.RPC_ETHEREUM}`,
         explorerUrl: 'https://api.etherscan.io/api'
     },
     2: {
@@ -98,7 +99,7 @@ async function fetchTransactionsByChain(userAddress: string, chainId: number): P
                 startblock: '0',
                 endblock: '99999999',
                 sort: 'asc',
-                apikey: ''
+                apikey: `${process.env.ETHERSCAN_APIKEY}`
             }
         });
 
@@ -127,17 +128,13 @@ async function fetchTransactionsByChain(userAddress: string, chainId: number): P
         
         return {
             totalTransactions: totalTxCount,
-            accountAge: {
-                firstTransactionHash: firstTx.hash,
-                firstTransactionTimestamp: firstTxDate.toISOString(),
-                blockNumber: firstTx.blockNumber
-            },
+            firstTransactionHash: firstTx.hash,
+            firstTransactionTimestamp: firstTxDate.toISOString(),
+            firstBlockNumber: firstTx.blockNumber,
             accountAgeDays,
-            lastTransactionDate: {
-                timestamp: lastTxDate.toISOString(),
-                hash: lastTx.hash,
-                blockNumber: lastTx.blockNumber
-            }
+            lastTransactionTimestamp: lastTxDate.toISOString(),
+            lastTransactionHash: lastTx.hash,
+            lastBlockNumber: lastTx.blockNumber
         };
     } catch (error) {
         console.error('Error details:', error);
