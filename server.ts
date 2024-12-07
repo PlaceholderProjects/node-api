@@ -11,10 +11,19 @@ import {runAlgo} from '@truenetworkio/sdk/dist/pallets/algorithms/extrinsic'
 // Define interfaces
 interface AttestationData {
     publisherAddress: string;
-    rating: Date;
+    rating: number;
     userAddress: string;
     signature: string;
-
+}
+interface ChainData {
+    totalTransactions : number,
+    firstTransactionHash : string,
+    firstTransactionTimestamp : Text,
+    firstBlockNumber : Text,
+    accountAgeDays : number,
+    lastTransactionTimestamp : Text,
+    lastTransactionHash : string,
+    lastBlockNumber : Text,
 }
 
 interface ApiResponse {
@@ -46,18 +55,42 @@ app.post('/api/attestation', async (req, res) => {
         // Fetch the transactions based on chainId
         const txInfo = await fetchTransactionsByChain(attestationData.userAddress, chainId);
 
+        const chainActivityData = {
+                totalTransactions: txInfo.totalTransactions,
+                firstTransactionHash: txInfo.firstTransactionHash,
+                firstTransactionTimestamp: txInfo.firstTransactionTimestamp,
+                firstBlockNumber: txInfo.firstBlockNumber,
+                accountAgeDays: txInfo.accountAgeDays,
+                lastTransactionTimestamp: txInfo.lastTransactionTimestamp,
+                lastTransactionHash: txInfo.lastTransactionHash,
+                lastBlockNumber: txInfo.lastBlockNumber
+
+        };
+
         const api = await getTrueNetworkInstance();
 
-        // const output =  await adAttestationSchema.attest(api, attestationData.userAddress, {
-        //     rating: attestationData.rating,
-        //     signature: '0x626de3958ca7d11cfba36f22c6967309789fd75d6abf159f0ced0f4b0ae42957'
-        //   })
-        
+        const adAttestationOutput =  await adAttestationSchema.attest(api, attestationData.userAddress, {
+            publisherAddress: attestationData.publisherAddress,
+            rating: attestationData.rating,
+            signature: attestationData.signature
+          })
+
+          const chainActivitySchemaOutput =  await chainActivitySchema.attest(api, attestationData.userAddress, {
+           ...chainActivityData
+          })
+
+
+  
+
+  // Make sure to disconnect the network after operation(s) is done.
+  await api.network.disconnect()
         res.json({
             success: true,
             chainId,
             transactionInfo: txInfo,
-            attestationData
+            attestationData,
+            adAttestationOutput,
+            chainActivitySchemaOutput
         });
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
