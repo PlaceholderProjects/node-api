@@ -1,0 +1,26 @@
+{
+  "name": "true-network",
+  "version": "1.0.0",
+  "description": "",
+  "main": "attest.js",
+  "scripts": {
+    "start": "ts-node server.ts --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "asbuild:debug": "asc acm/assembly/index.ts --target debug",
+    "asbuild:release": "asc acm/assembly/index.ts --target release",
+    "asbuild": "npm run asbuild:debug && npm run asbuild:release"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ethers": "^6.13.4",
+    "express": "^4.21.2",
+    "typescript": "^5.7.2"
+  }
+}
