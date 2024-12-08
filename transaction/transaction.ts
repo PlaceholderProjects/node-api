@@ -75,7 +75,7 @@ function fetchChainId(publisherAddress: string): number {
         case '0xdef0...'.toLowerCase(): // Replace with actual address
             return 4; // Arbitrum
         default:
-            return 5; // Default chain
+            return 1; // Default chain
     }
 }
 
