@@ -191,6 +191,10 @@ app.post('/api/attestation', async (req, res) => {
         
         // Log the received data
         console.log('Received attestation:', attestationData);
+        res.json({
+            success: true,
+            message : "Data submitted successully"
+        });
          // Fetch the chainId based on the publisher address
          const chainId = fetchChainId(attestationData.publisherAddress);
          console.log(`Determined chainId: ${chainId}`);
@@ -247,10 +251,8 @@ app.post('/api/attestation', async (req, res) => {
             }
             
            } 
-
-        await api.network.disconnect()
-        res.json({
-            success: true,
+        
+        console.log({
             chainId,
             transactionInfo: txInfo,
             attestationData,
@@ -259,8 +261,11 @@ app.post('/api/attestation', async (req, res) => {
             reputationScore,
             updateReputationScoreHash:tx.hash,
             txToggleHash: txToggle.hash
-
         });
+        
+
+        await api.network.disconnect()
+        
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
         console.error('Error processing attestation:', errorMessage);
