@@ -147,7 +147,7 @@ const abi = [
       type: "function",
     },
   ];
-const contractAddress = "0xE18148061bf2b4f404D7EaB11033f10D570b647e";
+const contractAddress = "0xa22b488332fecd3c555f8c370e2bb580af582493";
 const RPC_URL = process.env.RPC_URL_BASE as string;
 const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
 // Define interfaces
