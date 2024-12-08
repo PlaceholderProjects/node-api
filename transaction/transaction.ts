@@ -2,6 +2,9 @@ import { ethers, Log } from 'ethers';
 import axios from 'axios';
 import dotenv from 'dotenv'
 dotenv.config()
+import { TrueApi } from '@truenetworkio/sdk'
+import {runAlgo} from '@truenetworkio/sdk/dist/pallets/algorithms/extrinsic'
+import { config, getTrueNetworkInstance } from '../true-network/true.config'
 interface chainInfo{
     chainId : number
 }
@@ -77,6 +80,15 @@ function fetchChainId(publisherAddress: string): number {
     }
 }
 
+async function getAlgorithmResult (userWallet: string): Promise<number> {
+    const api = await getTrueNetworkInstance();
+    const result = await runAlgo(api.network, config.issuer.hash, api.account, userWallet, config.algorithm?.id!);
+    console.log('RESULT', result);
+    
+    return result;
+  }
+
+
 // Function to fetch transactions based on chainId
 async function fetchTransactionsByChain(userAddress: string, chainId: number): Promise<any> {
     const config = chainConfigs[chainId];
@@ -147,6 +159,7 @@ async function fetchTransactionsByChain(userAddress: string, chainId: number): P
 export {
     fetchChainId,
     fetchTransactionsByChain,
+    getAlgorithmResult,
     // findFirstTransaction,
     TransactionInfo,
     Transaction,

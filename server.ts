@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import {fetchTransactionsByChain, fetchChainId} from './transaction/transaction'
+import {fetchTransactionsByChain, fetchChainId, getAlgorithmResult} from './transaction/transaction'
 import { TrueApi } from '@truenetworkio/sdk'
 import { adAttestationSchema, chainActivitySchema } from './true-network/schemas'
 import { config, getTrueNetworkInstance } from './true-network/true.config'
@@ -57,33 +57,35 @@ app.post('/api/attestation', async (req, res) => {
 
         const chainActivityData = {
                 totalTransactions: txInfo.totalTransactions,
-                firstTransactionHash: txInfo.firstTransactionHash,
-                firstTransactionTimestamp: txInfo.firstTransactionTimestamp,
-                firstBlockNumber: txInfo.firstBlockNumber,
+                // firstTransactionHash: txInfo.firstTransactionHash,
+                // firstTransactionTimestamp: txInfo.firstTransactionTimestamp,
+                // firstBlockNumber: txInfo.firstBlockNumber,
                 accountAgeDays: txInfo.accountAgeDays,
-                lastTransactionTimestamp: txInfo.lastTransactionTimestamp,
-                lastTransactionHash: txInfo.lastTransactionHash,
-                lastBlockNumber: txInfo.lastBlockNumber
+                // lastTransactionTimestamp: txInfo.lastTransactionTimestamp,
+                // lastTransactionHash: txInfo.lastTransactionHash,
+                // lastBlockNumber: txInfo.lastBlockNumber
 
         };
 
         const api = await getTrueNetworkInstance();
 
         const adAttestationOutput =  await adAttestationSchema.attest(api, attestationData.userAddress, {
-            publisherAddress: attestationData.publisherAddress,
+            // publisherAddress: attestationData.publisherAddress,
             rating: attestationData.rating,
-            signature: attestationData.signature
+            // signature: attestationData.signature
           })
 
           const chainActivitySchemaOutput =  await chainActivitySchema.attest(api, attestationData.userAddress, {
            ...chainActivityData
           })
 
+        //   const result = await getAlgorithmResult(attestationData.userAddress);
+          const result = await runAlgo(api.network, config.issuer.hash, api.account, attestationData.userAddress, config.algorithm?.id!);
+          console.log('Result', result);
+          
 
-  
 
-  // Make sure to disconnect the network after operation(s) is done.
-  await api.network.disconnect()
+        await api.network.disconnect()
         res.json({
             success: true,
             chainId,

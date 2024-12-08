@@ -27,7 +27,7 @@ export const config: TrueConfig = {
     hash: '0xea1d3e711cee08ab926c7d973df37215ab47ae36b7cdd2d1aba1318948ff8bc1'
   },
   algorithm: {
-    id: 124,
+    id: 144,
     path: 'acm',
     schemas: [adAttestationSchema, chainActivitySchema]
   },

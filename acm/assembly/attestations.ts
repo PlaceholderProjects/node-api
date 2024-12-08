@@ -10,38 +10,21 @@ function readMemory<T>(index: usize): T {
 
 
 class ADATTESTATIONSCHEMA {
-  signature: string;
   rating: u64;
 
   constructor() {
-    this.signature = readMemory<string>(0);
-    this.rating = readMemory<u64>(32);
+    this.rating = readMemory<u64>(0);
   }
 }
 
 
 class CHAINACTIVITYSCHEMA {
-  transactionCount: u64;
-  totalValue: u64;
-  lastActivity: u64;
-  firstActivity: u64;
+  totalTransactions: u64;
+  accountAgeDays: u64;
 
   constructor() {
-    this.transactionCount = readMemory<u64>(40);
-    this.totalValue = readMemory<u64>(48);
-    this.lastActivity = readMemory<u64>(56);
-    this.firstActivity = readMemory<u64>(64);
-  }
-}
-
-
-class MULTICHAINREPUTATIONSCHEMA {
-  relatedChainsScore: u64;
-  primaryChainScore: u64;
-
-  constructor() {
-    this.relatedChainsScore = readMemory<u64>(72);
-    this.primaryChainScore = readMemory<u64>(80);
+    this.totalTransactions = readMemory<u64>(8);
+    this.accountAgeDays = readMemory<u64>(16);
   }
 }
 
@@ -49,5 +32,4 @@ class MULTICHAINREPUTATIONSCHEMA {
 export class Attestations {
   static adAttestationSchema: ADATTESTATIONSCHEMA = new ADATTESTATIONSCHEMA();
   static chainActivitySchema: CHAINACTIVITYSCHEMA = new CHAINACTIVITYSCHEMA();
-  static multiChainReputationSchema: MULTICHAINREPUTATIONSCHEMA = new MULTICHAINREPUTATIONSCHEMA();
 }
