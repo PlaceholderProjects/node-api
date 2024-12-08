@@ -24,18 +24,17 @@ npm run start
 
 The **Ad Attestation-Reputation System** is a robust framework designed to evaluate and rank ad publishers based on their credibility and on-chain activities within the **TrueNetwork** ecosystem. By leveraging attestations and blockchain activity metrics, the system ensures a fair and transparent reputation scoring mechanism, promoting trustworthiness and engagement among ad publishers.
 
-## Features
 
-- **Dual Schema Integration**: Combines ad attestations with on-chain activity data to provide a comprehensive reputation score.
+### Objectives:
+- Weight User Attestations: Base reputation on the ratings provided by attestations.
+- Incorporate Chain Activity: Adjust the weight of the attestation based on the user's on-chain activity.
+- Apply Quadratic Voting Principles: Ensure that the influence of attestation ratings is balanced with the intensity of user activity.
 
-## Architecture
-
-The system is built using **AssemblyScript**, interfacing with the **TrueNetwork**. It comprises two primary schemas to capture relevant data points:
-
-1. **Ad Attestation Schema**: Captures ratings and signatures from attestations.
-2. **Chain Activity Schema**: Monitors blockchain interactions such as transaction counts and account age.
-
-The reputation score is computed by integrating data from both schemas, ensuring that user ratings are weighted appropriately based on their blockchain engagement.
+### Explanation:
+- Rating (rating): The base score from attestations (e.g., 1 to 5 stars).
+- Total Transactions (totalTransactions): Represents user engagement. Taking the square root reduces the impact of very high transaction counts, aligning with quadratic principles.
+- Account Age in Days (accountAgeDays): Ensures that older accounts are weighted more, promoting long-term reliability. Using the logarithm smoothens the growth rate.
+- Normalization: Dividing by 2 normalizes the combined factor to keep the reputation score within a manageable range.
 
 ## Schemas
 
@@ -43,17 +42,20 @@ The reputation score is computed by integrating data from both schemas, ensuring
 
 Defines the structure for ad attestations, capturing essential information about ad publishers.
 
-
+```
 export const adAttestationSchema = Schema.create({
     publisherAddress: Text,
     rating: U64,
     signature: Text,
 });
+```
 
 
 
 ### chainActivitySchema 
- 
+
+
+``` 
 export const chainActivitySchema = Schema.create({
     totalTransactions: U64,
     firstTransactionHash: Text,
@@ -64,6 +66,7 @@ export const chainActivitySchema = Schema.create({
     lastTransactionHash: Text,
     lastBlockNumber: Text,
 });
+```
 
 ### Reputation Calculation Algorithm
 The reputation score is calculated by integrating the ad rating with on-chain activity metrics, applying quadratic principles to balance the influence of each factor.
