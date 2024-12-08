@@ -1,8 +1,7 @@
-import { ethers, Log } from 'ethers';
+import { ethers } from 'ethers';
 import axios from 'axios';
 import dotenv from 'dotenv'
 dotenv.config()
-import { TrueApi } from '@truenetworkio/sdk'
 import {runAlgo} from '@truenetworkio/sdk/dist/pallets/algorithms/extrinsic'
 import { config, getTrueNetworkInstance } from '../true-network/true.config'
 interface chainInfo{
@@ -62,7 +61,7 @@ const chainConfigs: Record<number, ChainConfig> = {
 
 // Function to determine chainId based on publisher address
 function fetchChainId(publisherAddress: string): number {
-    const address1 = '0x10C8542529696eD07b77FD26A7C6F9A8B56E10b1'; // Replace with actual address
+    const address1 = '0x5a0AC559B917CF10fC40EA8484AEccA303a599cC'; 
 
     const publisherAddr = publisherAddress.toLowerCase();
 
@@ -83,8 +82,6 @@ function fetchChainId(publisherAddress: string): number {
 async function getAlgorithmResult (userWallet: string): Promise<number> {
     const api = await getTrueNetworkInstance();
     const result = await runAlgo(api.network, config.issuer.hash, api.account, userWallet, config.algorithm?.id!);
-    console.log('RESULT', result);
-    
     return result;
   }
 
@@ -97,7 +94,7 @@ async function fetchTransactionsByChain(userAddress: string, chainId: number): P
         throw new Error(`Chain configuration not found for chainId: ${chainId}`);
     }
 
-    const provider = new ethers.JsonRpcProvider(config.rpcUrl);
+    const provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
 
     try {
         const baseURL = 'https://api.etherscan.io/api';
@@ -160,7 +157,6 @@ export {
     fetchChainId,
     fetchTransactionsByChain,
     getAlgorithmResult,
-    // findFirstTransaction,
     TransactionInfo,
     Transaction,
     ChainConfig
