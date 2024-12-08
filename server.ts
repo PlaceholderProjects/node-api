@@ -230,8 +230,23 @@ app.post('/api/attestation', async (req, res) => {
             const contract = new ethers.Contract(contractAddress, abi, wallet);
             const tx = await contract.updateReputationScore(attestationData.publisherAddress, reputationScore);
             const receipt = await tx.wait();
+            console.log('Updated Reputation Score');
+            
         //   await updatePublisherScore(attestationData.publisherAddress, reputationScore);
         //   console.log('Successfully updated reputation score');
+           let txToggle;
+           if(receipt.status === 1){
+            console.log('Updated Reputation Score');
+            if(reputationScore < 5 ) {
+                txToggle = await contract.toggleAdStatus(attestationData.publisherAddress);
+                const receiptToggle = await tx.wait(); 
+
+                if (receiptToggle === 1){
+                    console.log('Toggle called : Ad inactive');
+                }
+            }
+            
+           } 
 
         await api.network.disconnect()
         res.json({
@@ -242,7 +257,9 @@ app.post('/api/attestation', async (req, res) => {
             adAttestationOutput,
             chainActivitySchemaOutput,
             reputationScore,
-            hash:tx.hash
+            updateReputationScoreHash:tx.hash,
+            txToggleHash: txToggle.hash
+
         });
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';

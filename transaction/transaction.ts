@@ -61,7 +61,7 @@ const chainConfigs: Record<number, ChainConfig> = {
 
 // Function to determine chainId based on publisher address
 function fetchChainId(publisherAddress: string): number {
-    const address1 = '0x5a0AC559B917CF10fC40EA8484AEccA303a599cC'; 
+    const address1 = '0xb47CFCf8181D36117142b83D31BBBF63B1b250fE'; 
 
     const publisherAddr = publisherAddress.toLowerCase();
 
