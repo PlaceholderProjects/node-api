@@ -147,7 +147,7 @@ const abi = [
       type: "function",
     },
   ];
-const contractAddress = "0xa22b488332fecd3c555f8c370e2bb580af582493";
+const contractAddress = "0x61dda741ebc71e5e2230598ff105306a8fc47bcf";
 const RPC_URL = process.env.RPC_URL_BASE as string;
 const PRIVATE_KEY = process.env.PRIVATE_KEY as string;
 // Define interfaces
@@ -242,12 +242,12 @@ app.post('/api/attestation', async (req, res) => {
            if(receipt.status === 1){
             console.log('Updated Reputation Score');
             if(reputationScore < 5 ) {
-                txToggle = await contract.toggleAdStatus(attestationData.publisherAddress);
-                const receiptToggle = await tx.wait(); 
+                // txToggle = await contract.toggleAdStatus(attestationData.publisherAddress);
+                // const receiptToggle = await tx.wait(); 
 
-                if (receiptToggle === 1){
+                // if (receiptToggle === 1){
                     console.log('Toggle called : Ad inactive');
-                }
+                // }
             }
             
            } 
@@ -259,8 +259,8 @@ app.post('/api/attestation', async (req, res) => {
             adAttestationOutput,
             chainActivitySchemaOutput,
             reputationScore,
-            updateReputationScoreHash:tx.hash,
-            txToggleHash: txToggle.hash
+            // updateReputationScoreHash:tx.hash,
+            // txToggleHash: txToggle.hash
         });
         
 
